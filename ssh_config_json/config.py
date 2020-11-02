@@ -6,8 +6,29 @@ import shlex
 from os.path import expanduser, join
 import base64
 import json
+from typing import List, Dict, AnyStr, Union
 
 DEFAULT_SSH_CONFIG = join(expanduser("~"), ".ssh/config")
+
+
+class BaseError(Exception):
+    """Base error
+    """
+
+    pass
+
+
+class InvalidConfigParseError(BaseError):
+    """config::InvalidConfigParseError
+    """
+    def __init__(self, error_class, message):
+        self.error_class = error_class
+        self.message = message
+
+    def __str__(self):
+        return "{error_class}: {message}".format(
+            error_class=self.error_class, message=self.message
+        )
 
 
 class SSHConfig:
@@ -15,7 +36,7 @@ class SSHConfig:
 
     SSH_CONFIG_GROUPS = re.compile(r"(\w+)(?:\s*=\s*|\s+)(.+)")
 
-    def __init__(self, ssh_config=DEFAULT_SSH_CONFIG):
+    def __init__(self, ssh_config: AnyStr = DEFAULT_SSH_CONFIG):
         """Constructor
 
         Args:
@@ -27,7 +48,7 @@ class SSHConfig:
         else:
             self.ssh_config = ssh_config
 
-    def parse(self, save_key=False):
+    def parse(self, save_key: bool = False) -> List[Dict[str, str]]:
         """Parse SSH Config
 
         Args:
@@ -46,7 +67,7 @@ class SSHConfig:
 
                 match = re.match(self.SSH_CONFIG_GROUPS, line)
                 if not match:
-                    raise Exception("Unparsable line {}".format(line))
+                    raise InvalidConfigParseError("InvalidConfigParseError", "Unparsable line {}".format(line))
                 key = match.group(1)
                 value = match.group(2)
                 if key == "Host":
@@ -60,59 +81,81 @@ class SSHConfig:
                 else:
                     config_block.update({key: value})
                     if key == "IdentityFile" and save_key:
-                        path = self.get_identity_file_path(value)
-                        config_block.update({"IdentityFileContent": self.encode_identity_file_base64(path)})
+                        path = self._get_identity_file_path(value)
+                        config_block.update({"IdentityFileContent": self._encode_identity_file_base64(path)})
             config_list.append(config_block)
         self._config = config_list
         return config_list
 
-    def dump(self):
+    def _dump(self):
         return json.dumps(self._config, indent=4)
 
-    def dump_file(self, filepath):
-        with open(filepath, "w") as f:
-            f.write(self.dump())
+    def dump_file(self, filepath: AnyStr):
+        """Dump SSH Config Object to JSON
 
-    def load_file(self, filepath):
+        Args:
+            filepath(str): Output filepath
+        """
+        with open(filepath, "w") as f:
+            f.write(self._dump())
+
+    def load_file(self, filepath: AnyStr):
+        """Load JSON to SSH Config Object
+
+        Args:
+            filepath: Input filepath
+        """
         with open(filepath, "r") as f:
             self._config = json.loads(f.read())
 
-    def restore(self, restore_key=False):
+    def restore(self, restore_key: bool = False):
+        """Restore SSH Config Object to SSH Config
+
+        Args:
+            restore_key: Restore IdentityFile
+        """
         with open(self.ssh_config, "w") as f:
             f.write(self.create_ssh_config_str(restore_key))
 
-    def create_ssh_config_str(self, restore_key):
+    def create_ssh_config_str(self, restore_key: bool):
+        """Create SSH Config File string
+
+        Args:
+            restore_key: Restore IdentityFile
+        """
         write_line = []
         for config in self._config:
             if "Host" not in config and "Match" not in config:
                 write_line.extend([f"{key} {value}" for key, value in config.items()])
             if "Host" in config:
                 write_line.append(f"Host {config['Host']}")
-                write_line.extend([f"    {key} {value}" for key, value in config.items() if key != "IdentityFileContent" and key != "Host"])
+                write_line.extend([f"    {key} {value}" for key, value in config.items() if
+                                   key != "IdentityFileContent" and key != "Host"])
                 if "IdentityFileContent" in config and "IdentityFile" in config and restore_key:
-                    self.save_identity_file(config["IdentityFile"], config["IdentityFileContent"])
+                    self._save_identity_file(config["IdentityFile"], config["IdentityFileContent"])
             if "Match" in config:
                 write_line.append(f"Match {config['Match']}")
-                write_line.extend([f"    {key} {value}" for key, value in config.items() if key != "IdentityFileContent" and key != "Match"])
+                write_line.extend([f"    {key} {value}" for key, value in config.items() if
+                                   key != "IdentityFileContent" and key != "Match"])
         return "\n".join(write_line)
 
     @staticmethod
-    def get_identity_file_path(path):
+    def _get_identity_file_path(path: AnyStr):
         if "~/" in path:
             path = path.replace("~/", "")
             return join(expanduser("~"), path)
         else:
             return path
 
-    def save_identity_file(self, path, base64_content):
-        self.decode_identity_file(self.get_identity_file_path(path), base64_content)
+    def _save_identity_file(self, path: AnyStr, base64_content: str):
+        self._decode_identity_file(self._get_identity_file_path(path), base64_content)
 
     @staticmethod
-    def encode_identity_file_base64(path):
+    def _encode_identity_file_base64(path: AnyStr) -> str:
         with open(path, "rb") as f:
             return base64.b64encode(f.read()).decode("ascii")
 
     @staticmethod
-    def decode_identity_file(path, base64_text):
+    def _decode_identity_file(path: AnyStr, base64_text: str):
         with open(path, "wb") as f:
             f.write(base64.b64decode(base64_text.encode("ascii")))

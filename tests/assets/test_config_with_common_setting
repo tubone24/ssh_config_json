@@ -1,0 +1,17 @@
+# comment!!
+ServerAliveInterval 60
+
+Host test1Server
+    User          testuser
+    HostName      test1.example.com
+    Port          22
+    IdentityFile  tests/assets/test1.pem
+    StrictHostKeyChecking no
+    UserKnownHostsFile=/dev/null
+
+Host test2Server
+    User          root
+    HostName      test2.example.com
+    Port          22222
+    StrictHostKeyChecking no
+    UserKnownHostsFile=/dev/null
