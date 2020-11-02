@@ -239,3 +239,67 @@ class TestSSHConfig:
             target.dump_file("test.json")
             mock_open.assert_any_call("test.json", "w")
             mock_json_dumps.assert_called_once_with(expected, indent=4)
+
+    def test_load_file_ok(self):
+        target = SSHConfig("tests/assets/test_config")
+        target.load_file("tests/assets/test.json")
+        expected = [
+            {},
+            {
+                "Host": "test1Server",
+                "HostName": "test1.example.com",
+                "IdentityFile": "tests/assets/test1.pem",
+                "Port": "22",
+                "User": "testuser",
+                "ServerAliveInterval": "60",
+                "StrictHostKeyChecking": "no",
+                "UserKnownHostsFile": "/dev/null"
+            },
+            {
+                "Host": "test2Server",
+                "HostName": "test2.example.com",
+                "Port": "22222",
+                "ServerAliveInterval": "60",
+                "StrictHostKeyChecking": "no",
+                "User": "root",
+                "UserKnownHostsFile": "/dev/null"
+            },
+            {
+                "Match": 'exec "networksetup -getairportnetwork en0 | grep -q \'<SSID>\'"',
+                "ProxyCommand": "connect -s -S <proxy server> -5 %h %p"
+            }
+        ]
+        assert target._config == expected
+
+    def test_restore(self):
+        target = SSHConfig("tests/assets/test_config")
+        with patch("builtins.open") as mock_open, patch.object(target, "create_ssh_config_str") as mock_create_ssh_config_str:
+            target._config = [
+                {},
+                {
+                    "Host": "test1Server",
+                    "HostName": "test1.example.com",
+                    "IdentityFile": "tests/assets/test1.pem",
+                    "Port": "22",
+                    "User": "testuser",
+                    "ServerAliveInterval": "60",
+                    "StrictHostKeyChecking": "no",
+                    "UserKnownHostsFile": "/dev/null"
+                },
+                {
+                    "Host": "test2Server",
+                    "HostName": "test2.example.com",
+                    "Port": "22222",
+                    "ServerAliveInterval": "60",
+                    "StrictHostKeyChecking": "no",
+                    "User": "root",
+                    "UserKnownHostsFile": "/dev/null"
+                },
+                {
+                    "Match": 'exec "networksetup -getairportnetwork en0 | grep -q \'<SSID>\'"',
+                    "ProxyCommand": "connect -s -S <proxy server> -5 %h %p"
+                }
+            ]
+            target.restore()
+            mock_open.assert_any_call("tests/assets/test_config", "w")
+            mock_create_ssh_config_str.assert_called_once_with(False)
