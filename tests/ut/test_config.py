@@ -4,6 +4,7 @@ import logging
 import json
 from unittest.mock import call
 from unittest.mock import patch
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -206,6 +207,35 @@ class TestSSHConfig:
              target.parse()
 
     def test_dump_file_ok(self):
-        with patch(json.dumps) as mock_dumps:
+        with patch("builtins.open") as mock_open, patch("json.dumps") as mock_json_dumps:
             target = SSHConfig("tests/assets/test_config")
+            expected = [
+                {},
+                {
+                    "Host": "test1Server",
+                    "HostName": "test1.example.com",
+                    "IdentityFile": "tests/assets/test1.pem",
+                    "Port": "22",
+                    "User": "testuser",
+                    "ServerAliveInterval": "60",
+                    "StrictHostKeyChecking": "no",
+                    "UserKnownHostsFile": "/dev/null"
+                },
+                {
+                    "Host": "test2Server",
+                    "HostName": "test2.example.com",
+                    "Port": "22222",
+                    "ServerAliveInterval": "60",
+                    "StrictHostKeyChecking": "no",
+                    "User": "root",
+                    "UserKnownHostsFile": "/dev/null"
+                },
+                {
+                    "Match": 'exec "networksetup -getairportnetwork en0 | grep -q \'<SSID>\'"',
+                    "ProxyCommand": "connect -s -S <proxy server> -5 %h %p"
+                }
+            ]
+            target._config = expected
             target.dump_file("test.json")
+            mock_open.assert_any_call("test.json", "w")
+            mock_json_dumps.assert_called_once_with(expected, indent=4)
