@@ -1,20 +1,17 @@
-import fnmatch
-import getpass
-import os
 import re
-import shlex
 from os.path import expanduser, join
 import base64
 import json
-from typing import List, Dict, AnyStr, Union
+import logging
+from typing import List, Dict, AnyStr
 
+_logger = logging.getLogger(name=__name__)
 DEFAULT_SSH_CONFIG = join(expanduser("~"), ".ssh/config")
 
 
 class BaseError(Exception):
     """Base error
     """
-
     pass
 
 
@@ -98,6 +95,7 @@ class SSHConfig:
         """
         with open(filepath, "w") as f:
             f.write(self._dump())
+        _logger.info(f"Dump JSON: {filepath}")
 
     def load_file(self, filepath: AnyStr):
         """Load JSON to SSH Config Object
@@ -116,6 +114,7 @@ class SSHConfig:
         """
         with open(self.ssh_config, "w") as f:
             f.write(self.create_ssh_config_str(restore_key))
+        _logger.info(f"Dump Config: {self.ssh_config}")
 
     def create_ssh_config_str(self, restore_key: bool):
         """Create SSH Config File string

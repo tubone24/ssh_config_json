@@ -1,0 +1,17 @@
+Host test1Server
+    HostName test1.example.com
+    IdentityFile tests/assets/test1.pem
+    Port 22
+    User testuser
+    ServerAliveInterval 60
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+Host test2Server
+    HostName test2.example.com
+    Port 22222
+    ServerAliveInterval 60
+    StrictHostKeyChecking no
+    User root
+    UserKnownHostsFile /dev/null
+Match exec "networksetup -getairportnetwork en0 | grep -q '<SSID>'"
+    ProxyCommand connect -s -S <proxy server> -5 %h %p
