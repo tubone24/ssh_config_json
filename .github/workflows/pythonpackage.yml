@@ -1,7 +1,7 @@
 name: TestingPythonPackage
 on: [pull_request]
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
@@ -28,12 +28,18 @@ jobs:
           pip install -r requirements-test.txt
           coverage run --source=ssh_config_json -m pytest --it
           coverage report -m
-          mkdir -p coverage
-          coveralls --output coverage/lcov.info
+      - name: Coveralls
+        uses: AndreMiras/coveralls-python-action@develop
+        with:
+          parallel: true
       - name: Lint check
         run: |
           black ssh_config_json setup.py --check
-      - name: Coveralls
-        uses: coverallsapp/github-action@master
+  coveralls_finish:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Coveralls Finished
+        uses: AndreMiras/coveralls-python-action@develop
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true
