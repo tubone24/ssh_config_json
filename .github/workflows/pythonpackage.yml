@@ -24,9 +24,12 @@ jobs:
         run: |
           pip install pytest
           pip install -r requirements-test.txt
-          coverage run --source=ssh_config_json -m pytest --it --junit-xml=coverage.xml
+          coverage run --source=ssh_config_json -m pytest --it
           coverage report -m
-          coverage xml
       - name: Lint check
         run: |
           black ssh_config_json setup.py --check
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
