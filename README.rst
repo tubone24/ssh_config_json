@@ -6,6 +6,22 @@ SSH Config JSON
 
 ------
 
+.. image:: http://img.shields.io/badge/license-MIT-blue.svg?style=flat
+   :target: https://github.com/tubone24/ebook_homebrew/blob/master/LICENSE
+   :alt: LICENSE
+
+.. image:: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
+   :target: http://makeapullrequest.com
+   :alt: PR Welcomes
+
+.. image:: https://github.com/tubone24/ssh_config_json/workflows/TestingPythonPackage/badge.svg
+   :target: https://github.com/tubone24/ssh_config_json/actions?query=workflow%3ATestingPythonPackage
+   :alt: GitHub Actions
+
+.. image:: https://coveralls.io/repos/github/tubone24/ssh_config_json/badge.svg?branch=main
+   :target: https://coveralls.io/github/tubone24/ssh_config_json?branch=main
+   :alt: Coverage
+
 Getting Started
 ===============
 
