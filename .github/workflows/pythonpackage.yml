@@ -1,7 +1,7 @@
 name: TestingPythonPackage
 on: [pull_request]
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
@@ -28,18 +28,8 @@ jobs:
           pip install -r requirements-test.txt
           coverage run --source=ssh_config_json -m pytest --it
           coverage report -m
-#      - name: Coveralls
-#        uses: AndreMiras/coveralls-python-action@develop
-#        with:
-#          parallel: true
+          mkdir -p coverage
+          coveralls
       - name: Lint check
         run: |
           black ssh_config_json setup.py --check
-  coveralls_finish:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Coveralls Finished
-        uses: AndreMiras/coveralls-python-action@develop
-        with:
-          parallel-finished: true
