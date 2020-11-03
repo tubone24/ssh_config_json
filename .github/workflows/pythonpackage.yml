@@ -21,6 +21,8 @@ jobs:
         run: |
           python setup.py install
       - name: Test with pytest
+        env:
+          GITHUB_TOKEN: ${{ secrets.github_token }}
         run: |
           pip install pytest
           pip install -r requirements-test.txt
@@ -31,7 +33,3 @@ jobs:
       - name: Lint check
         run: |
           black ssh_config_json setup.py --check
-      - name: Coveralls
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
