@@ -41,3 +41,4 @@ jobs:
         with:
           user: tubone24
           password: ${{ secrets.pypi_password }}
+          skip_existing: true
