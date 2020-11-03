@@ -3,9 +3,9 @@ Overview:
   Dump JSON for your ssh config include IdentityFiles and restore those.
 
 Usage:
-  main.py [-h|--help] [-v|--version]
-  main.py dump <file> [-c|--config=<config>] [-i|--identityFile]
-  main.py restore <file> [-c|--config=<config>] [-i|--identityFile]
+  scj [-h|--help] [-v|--version]
+  scj dump <file> [-c|--config=<config>] [-i|--identityFile]
+  scj restore <file> [-c|--config=<config>] [-i|--identityFile]
 
 Options:
   dump                       : dump SSH Config file to JSON
@@ -18,6 +18,7 @@ Options:
 """
 
 from docopt import docopt
+
 try:
     from __init__ import __version__
 except ModuleNotFoundError:
@@ -31,9 +32,17 @@ except ModuleNotFoundError:
 def main():
     args = docopt(__doc__, version=f"SSH Config JSON: {__version__}")
     if args["dump"]:
-        dump(args["<file>"], config=args["--config"][0], identity_file=args["--identityFile"])
+        dump(
+            args["<file>"],
+            config=args["--config"][0],
+            identity_file=args["--identityFile"],
+        )
     elif args["restore"]:
-        restore(args["<file>"], config=args["--config"][0], identity_file=args["--identityFile"])
+        restore(
+            args["<file>"],
+            config=args["--config"][0],
+            identity_file=args["--identityFile"],
+        )
     else:
         print(__doc__)
 

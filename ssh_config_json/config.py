@@ -12,12 +12,14 @@ DEFAULT_SSH_CONFIG = join(expanduser("~"), ".ssh/config")
 class BaseError(Exception):
     """Base error
     """
+
     pass
 
 
 class InvalidConfigParseError(BaseError):
     """config::InvalidConfigParseError
     """
+
     def __init__(self, error_class, message):
         self.error_class = error_class
         self.message = message
@@ -64,7 +66,9 @@ class SSHConfig:
 
                 match = re.match(self.SSH_CONFIG_GROUPS, line)
                 if not match:
-                    raise InvalidConfigParseError("InvalidConfigParseError", "Unparsable line {}".format(line))
+                    raise InvalidConfigParseError(
+                        "InvalidConfigParseError", "Unparsable line {}".format(line)
+                    )
                 key = match.group(1)
                 value = match.group(2)
                 if key == "Host":
@@ -79,7 +83,13 @@ class SSHConfig:
                     config_block.update({key: value})
                     if key == "IdentityFile" and save_key:
                         path = self._get_identity_file_path(value)
-                        config_block.update({"IdentityFileContent": self._encode_identity_file_base64(path)})
+                        config_block.update(
+                            {
+                                "IdentityFileContent": self._encode_identity_file_base64(
+                                    path
+                                )
+                            }
+                        )
             config_list.append(config_block)
         self._config = config_list
         return config_list
@@ -128,14 +138,30 @@ class SSHConfig:
                 write_line.extend([f"{key} {value}" for key, value in config.items()])
             if "Host" in config:
                 write_line.append(f"Host {config['Host']}")
-                write_line.extend([f"    {key} {value}" for key, value in config.items() if
-                                   key != "IdentityFileContent" and key != "Host"])
-                if "IdentityFileContent" in config and "IdentityFile" in config and restore_key:
-                    self._save_identity_file(config["IdentityFile"], config["IdentityFileContent"])
+                write_line.extend(
+                    [
+                        f"    {key} {value}"
+                        for key, value in config.items()
+                        if key != "IdentityFileContent" and key != "Host"
+                    ]
+                )
+                if (
+                    "IdentityFileContent" in config
+                    and "IdentityFile" in config
+                    and restore_key
+                ):
+                    self._save_identity_file(
+                        config["IdentityFile"], config["IdentityFileContent"]
+                    )
             if "Match" in config:
                 write_line.append(f"Match {config['Match']}")
-                write_line.extend([f"    {key} {value}" for key, value in config.items() if
-                                   key != "IdentityFileContent" and key != "Match"])
+                write_line.extend(
+                    [
+                        f"    {key} {value}"
+                        for key, value in config.items()
+                        if key != "IdentityFileContent" and key != "Match"
+                    ]
+                )
         return "\n".join(write_line)
 
     @staticmethod
