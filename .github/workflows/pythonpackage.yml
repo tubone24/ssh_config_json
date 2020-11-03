@@ -26,6 +26,8 @@ jobs:
           pip install -r requirements-test.txt
           coverage run --source=ssh_config_json -m pytest --it
           coverage report -m
+          mkdir -p coverage
+          coveralls --output coverage/lcov.info
       - name: Lint check
         run: |
           black ssh_config_json setup.py --check
