@@ -2,6 +2,11 @@
 
 `SSH Config JSON` is dumping JSON for your ssh config include IdentityFiles and restoring those.
 
+## Description
+
+`SSH Config JSON` enables you to pack and restore your SSH Config and Private Key in JSON format,
+allowing you to backup, port to CI and share with others in the project.
+
 ## Getting Started
 
 `SSH Config JSON` uses `The Python Package Index(Pypi)`, so that you can use `pip` installer.
