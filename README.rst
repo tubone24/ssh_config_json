@@ -6,17 +6,33 @@ SSH Config JSON
 
 ------
 
+.. image:: http://img.shields.io/badge/license-MIT-blue.svg?style=flat
+   :target: https://github.com/tubone24/ebook_homebrew/blob/master/LICENSE
+   :alt: LICENSE
+
+.. image:: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
+   :target: http://makeapullrequest.com
+   :alt: PR Welcomes
+
+.. image:: https://github.com/tubone24/ssh_config_json/workflows/TestingPythonPackage/badge.svg
+   :target: https://github.com/tubone24/ssh_config_json/actions?query=workflow%3ATestingPythonPackage
+   :alt: GitHub Actions
+
+.. image:: https://coveralls.io/repos/github/tubone24/ssh_config_json/badge.svg?branch=main
+   :target: https://coveralls.io/github/tubone24/ssh_config_json?branch=main
+   :alt: Coverage
+
 Getting Started
 ===============
 
-``SSH Config JSON`` is ``The Python Package Index(Pypi)``, so that you can use ``pip`` installer.
+``SSH Config JSON`` uses ``The Python Package Index(Pypi)``, so that you can use ``pip`` installer.
 
 pip installer
 ----------------------
 
 .. code-block:: bash
 
-   $ pip install xxxxxx
+   $ pip install ssh-config-json
 
 Usage
 =====
@@ -92,7 +108,7 @@ If you want to get coverage report, run coverage and check the report.
 Integration Test
 ----------------
 
-Using pytest, if you want to do integrated tests with mark "--it"
+Using pytest, if you want to do integrated tests with mark "--it".
 
 .. code-block:: bash
 

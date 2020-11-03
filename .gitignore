@@ -134,3 +134,6 @@ dmypy.json
 
 # mac
 .DS_Store
+
+# docs
+docs/site

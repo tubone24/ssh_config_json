@@ -1,12 +1,15 @@
-name: TestingPythonPackage
-on: [pull_request]
+name: UploadPipy
+on:
+  push:
+    branches:
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.6, 3.7, 3.8]
+        python-version: [3.8]
     steps:
       - uses: actions/checkout@v1
       - name: Set up Python ${{ matrix.python-version }}
@@ -33,3 +36,9 @@ jobs:
       - name: Lint check
         run: |
           black ssh_config_json setup.py --check
+      - name: Publish package
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: tubone24
+          password: ${{ secrets.pypi_password }}

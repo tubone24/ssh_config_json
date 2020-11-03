@@ -1,0 +1,8 @@
+site_name: SSH Config JSON
+theme: readthedocs
+extra_css:
+  - "//fonts.googleapis.com/earlyaccess/notosansjp.css"
+  - "//fonts.googleapis.com/css?family=Open+Sans:600,800"
+  - "css/custom.css"
+markdown_extensions:
+  - admonition
