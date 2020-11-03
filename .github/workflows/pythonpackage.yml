@@ -28,10 +28,10 @@ jobs:
           pip install -r requirements-test.txt
           coverage run --source=ssh_config_json -m pytest --it
           coverage report -m
-      - name: Coveralls
-        uses: AndreMiras/coveralls-python-action@develop
-        with:
-          parallel: true
+#      - name: Coveralls
+#        uses: AndreMiras/coveralls-python-action@develop
+#        with:
+#          parallel: true
       - name: Lint check
         run: |
           black ssh_config_json setup.py --check
