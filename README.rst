@@ -92,7 +92,7 @@ If you want to get coverage report, run coverage and check the report.
 Integration Test
 ----------------
 
-Using pytest, if you want to do integrated tests with mark "--it"
+Using pytest, if you want to do integrated tests with mark "--it".
 
 .. code-block:: bash
 
