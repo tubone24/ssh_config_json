@@ -6,7 +6,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.6, 3.7]
+        python-version: [3.6, 3.7, 3.8]
     steps:
       - uses: actions/checkout@v1
       - name: Set up Python ${{ matrix.python-version }}
@@ -29,4 +29,4 @@ jobs:
           coverage xml
       - name: Lint check
         run: |
-          black ebook_homebrew setup.py --check
+          black ssh_config_json setup.py --check
