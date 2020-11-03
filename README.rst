@@ -25,14 +25,14 @@ SSH Config JSON
 Getting Started
 ===============
 
-``SSH Config JSON`` is ``The Python Package Index(Pypi)``, so that you can use ``pip`` installer.
+``SSH Config JSON`` uses ``The Python Package Index(Pypi)``, so that you can use ``pip`` installer.
 
 pip installer
 ----------------------
 
 .. code-block:: bash
 
-   $ pip install xxxxxx
+   $ pip install ssh-config-json
 
 Usage
 =====

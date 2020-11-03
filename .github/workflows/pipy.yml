@@ -1,0 +1,41 @@
+name: UploadPipy
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.8]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Setup ssh_config_json
+        run: |
+          python setup.py install
+      - name: Test with pytest
+        env:
+          GITHUB_TOKEN: ${{ secrets.github_token }}
+        run: |
+          pip install pytest
+          pip install -r requirements-test.txt
+          coverage run --source=ssh_config_json -m pytest --it
+          coverage report -m
+          mkdir -p coverage
+          coveralls
+      - name: Lint check
+        run: |
+          black ssh_config_json setup.py --check
+      - name: Publish package
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: tubone24
+          password: ${{ secrets.pypi_password }}
