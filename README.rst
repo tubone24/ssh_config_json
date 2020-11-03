@@ -22,6 +22,13 @@ SSH Config JSON
    :target: https://coveralls.io/github/tubone24/ssh_config_json?branch=main
    :alt: Coverage
 
+.. image:: https://readthedocs.org/projects/ssh-config-json/badge/?version=latest
+   :target: https://ssh-config-json.readthedocs.io/en/latest/?badge=latest
+   :alt: Documentation Status
+
+``SSH Config JSON`` enables you to pack and restore your SSH Config and Private Key in JSON format,
+allowing you to backup, port to CI and share with others in the project.
+
 Getting Started
 ===============
 
@@ -122,6 +129,11 @@ With tox, you can test multiple python version.(only python 3.6, 3.7, 3.8)
 .. code-block:: bash
 
    $ tox
+
+Document
+========
+
+The `Document <https://ssh-config-json.readthedocs.io/en/latest/>`_ write by mkdocs.
 
 Licence
 =======
