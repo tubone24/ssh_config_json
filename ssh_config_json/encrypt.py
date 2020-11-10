@@ -11,13 +11,15 @@ from Crypto.Util import Padding
 class AESCipher(object):
     def __init__(self, key=None, key_num=32):
         if key is not None:
-            self.key = (hashlib.shake_128(key.encode("utf-8")).hexdigest(16)).encode("utf-8")
+            self.key = (hashlib.shake_128(key.encode("utf-8")).hexdigest(16)).encode(
+                "utf-8"
+            )
         else:
             raw_key = self.create_key(key_num)
             print(f"Encrypt key: {raw_key}")
-            self.key = (hashlib.shake_128(raw_key.encode("utf-8")).hexdigest(16)).encode(
-                "utf-8"
-            )
+            self.key = (
+                hashlib.shake_128(raw_key.encode("utf-8")).hexdigest(16)
+            ).encode("utf-8")
 
     @staticmethod
     def create_key(key_num=32):
