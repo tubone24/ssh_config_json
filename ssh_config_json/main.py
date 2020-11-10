@@ -4,8 +4,8 @@ Overview:
 
 Usage:
   scj [-h|--help] [-v|--version]
-  scj dump <file> [-c|--config=<config>] [-i|--identityFile]
-  scj restore <file> [-c|--config=<config>] [-i|--identityFile]
+  scj dump <file> [-c|--config=<config>] [-i|--identityFile] [-e|--encrypt=<key>]
+  scj restore <file> [-c|--config=<config>] [-i|--identityFile] [-d|--decrypt=<key>]
 
 Options:
   dump                       : dump SSH Config file to JSON
@@ -15,6 +15,7 @@ Options:
   -v, --version              : Show version
   -c, --config=<config>      : Specific SSH Config file path [default: ~/.ssh/config]
   -i, --identityFile         : Include IdentityFiles
+  -e, --encrypt=<key>        : Encrypt JSON dump with AES [default: ~/.ssh/config]
 """
 
 from docopt import docopt
