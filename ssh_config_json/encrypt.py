@@ -48,6 +48,7 @@ class AESCipher(object):
             f2.write(self.encrypt(f1.read()))
         if delete_raw_file:
             os.remove(path)
+        print(f"Encrypted file: {path}.enc")
 
     def decrypt_file(self, path, delete_raw_file=False):
         with open(path, "rb") as f1, open(path.replace(".enc", ""), "w") as f2:

@@ -4,7 +4,7 @@ Overview:
 
 Usage:
   scj [-h|--help] [-v|--version]
-  scj dump <file> [-c|--config=<config>] [-i|--identityFile] [-e|--encrypt=<key>]
+  scj dump <file> [-c|--config=<config>] [-i|--identityFile] [-e|--encrypt] [--key=<key>]
   scj restore <file> [-c|--config=<config>] [-i|--identityFile] [-d|--decrypt=<key>]
 
 Options:
@@ -15,7 +15,8 @@ Options:
   -v, --version              : Show version
   -c, --config=<config>      : Specific SSH Config file path [default: ~/.ssh/config]
   -i, --identityFile         : Include IdentityFiles
-  -e, --encrypt=<key>        : Encrypt JSON dump with AES [default: ~/.ssh/config]
+  -e, --encrypt              : Encrypt JSON dump with AES
+  -d, --decrypt=<key>        : Decrypt JSON dump with AES
 """
 
 from docopt import docopt
@@ -28,6 +29,10 @@ try:
     from config import SSHConfig
 except ModuleNotFoundError:
     from ssh_config_json.config import SSHConfig
+try:
+    from encrypt import AESCipher
+except ModuleNotFoundError:
+    from ssh_config_json.encrypt import AESCipher
 
 
 def main():
@@ -38,12 +43,20 @@ def main():
             config=args["--config"][0],
             identity_file=args["--identityFile"],
         )
+        if args["--encrypt"]:
+            if args["--key"]:
+                encrypt(args["<file>"], args["--key"])
+            else:
+                encrypt(args["<file>"])
+
     elif args["restore"]:
         restore(
             args["<file>"],
             config=args["--config"][0],
             identity_file=args["--identityFile"],
         )
+        if args["--decrypt"]:
+            decrypt(args["<file>"], args["--decrypt"][0])
     else:
         print(__doc__)
 
@@ -58,6 +71,16 @@ def restore(filepath, config, identity_file=False):
     ssh_config = SSHConfig(config)
     ssh_config.load_file(filepath=filepath)
     ssh_config.restore(restore_key=identity_file)
+
+
+def encrypt(filepath, key=None):
+    enc = AESCipher(key=key)
+    enc.encrypt_file(filepath, delete_raw_file=True)
+
+
+def decrypt(filepath, key):
+    enc = AESCipher(key=key)
+    enc.decrypt_file(filepath, delete_raw_file=True)
 
 
 if __name__ == "__main__":
