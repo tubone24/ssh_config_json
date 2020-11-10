@@ -22,6 +22,10 @@ class TestSSHConfig:
         target = SSHConfig("tests/assets/test_config")
         assert target.ssh_config == "tests/assets/test_config"
 
+    def test_constructor_tilde(self):
+        target = SSHConfig("~/.ssh/config")
+        assert target.ssh_config == join(expanduser("~"), ".ssh/config")
+
     def test_parse_ok(self):
         expected = [
             {},
@@ -606,3 +610,12 @@ Match exec "networksetup -getairportnetwork en0 | grep -q '<SSID>'"
     ProxyCommand connect -s -S <proxy server> -5 %h %p"""
         assert actual == expected
         mock_open.assert_any_call("tests/assets/test1.pem", "wb")
+
+    def test_invalid_config_parse_error_str(self):
+        error = InvalidConfigParseError("InvalidConfigParseError", "test error")
+        assert str(error) == "InvalidConfigParseError: test error"
+
+    def test__get_identity_file_path_tilde(self):
+        target = SSHConfig("tests/assets/test_config_with_common_setting")
+        actual = target._get_identity_file_path("~/.ssh/config")
+        assert actual == join(expanduser("~"), ".ssh/config")

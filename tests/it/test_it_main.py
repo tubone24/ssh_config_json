@@ -3,7 +3,7 @@ import os
 import shutil
 
 import pytest
-from ssh_config_json.main import dump, restore
+from ssh_config_json.main import dump, restore, encrypt, decrypt
 
 _logger = logging.getLogger(name=__name__)
 
@@ -30,6 +30,21 @@ class TestItMain:
         config_path = os.path.join(tmpdir, "test_config")
         expected_json_path = os.path.join(tmpdir, "test.json")
         dump(json_path, config_path, identity_file=False)
+        with open(json_path, "r") as f1, open(expected_json_path, "r") as f2:
+            actual = f1.read()
+            expected = f2.read()
+            assert actual == expected
+
+    @pytest.mark.it
+    def test_it_dump_with_encrypt(self, tmpdir):
+        _logger.debug("Temp directory: {tmp_dir}".format(tmp_dir=tmpdir))
+        self.copy_file(tmpdir)
+        json_path = os.path.join(tmpdir, "test_config.json")
+        config_path = os.path.join(tmpdir, "test_config")
+        expected_json_path = os.path.join(tmpdir, "test.json")
+        dump(json_path, config_path, identity_file=False)
+        encrypt(json_path, key="test")
+        decrypt(json_path + ".enc", key="test")
         with open(json_path, "r") as f1, open(expected_json_path, "r") as f2:
             actual = f1.read()
             expected = f2.read()

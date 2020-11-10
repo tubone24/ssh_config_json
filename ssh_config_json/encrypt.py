@@ -15,14 +15,14 @@ class AESCipher(object):
                 "utf-8"
             )
         else:
-            raw_key = self.create_key(key_num)
-            print(f"Encrypt key: {raw_key}")
+            self.raw_key = self._create_key(key_num)
+            print(f"Encrypt key: {self.raw_key}")
             self.key = (
-                hashlib.shake_128(raw_key.encode("utf-8")).hexdigest(16)
+                hashlib.shake_128(self.raw_key.encode("utf-8")).hexdigest(16)
             ).encode("utf-8")
 
     @staticmethod
-    def create_key(key_num=32):
+    def _create_key(key_num=32):
         return "".join(
             [
                 SystemRandom().choice(string.ascii_letters + string.digits)
@@ -41,7 +41,7 @@ class AESCipher(object):
         iv = encrypted[: AES.block_size]
         cipher = AES.new(self.key, AES.MODE_EAX, iv)
         data = Padding.unpad(
-            cipher.decrypt(encrypted[AES.block_size :]), AES.block_size, "pkcs7"
+            cipher.decrypt(encrypted[AES.block_size:]), AES.block_size, "pkcs7"
         )
         return data.decode("utf-8")
 
@@ -57,9 +57,3 @@ class AESCipher(object):
             f2.write(self.decrypt(f1.read()))
         if delete_raw_file:
             os.remove(path)
-
-
-if __name__ == "__main__":
-    ci = AESCipher("test")
-    # ci.encrypt_file("requirements2.txt")
-    ci.decrypt_file("requirements2.txt.enc")
