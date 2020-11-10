@@ -16,6 +16,7 @@ Options:
   -c, --config=<config>      : Specific SSH Config file path [default: ~/.ssh/config]
   -i, --identityFile         : Include IdentityFiles
   -e, --encrypt              : Encrypt JSON dump with AES
+  --key=<key>                : Set specify key string
   -d, --decrypt=<key>        : Decrypt JSON dump with AES
 """
 
