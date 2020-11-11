@@ -187,8 +187,3 @@ Licence
 =======
 
 This software is released under the MIT License, see LICENSE.
-
-Change log
-==========
-
-Read the `GitHub Release Page <https://github.com/tubone24/ssh_config_json/releases>`_ !
