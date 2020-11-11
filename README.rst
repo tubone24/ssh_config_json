@@ -25,15 +25,15 @@ SSH Config JSON
 .. image:: https://img.shields.io/pypi/dm/ssh-config-json.svg
    :target: https://pypi.org/project/ssh-config-json/
    :alt: PyPI downloads
-   
+
 .. image:: https://img.shields.io/pypi/v/ssh-config-json.svg
    :target: https://pypi.org/project/ssh-config-json/
    :alt: pip Version
-   
+
 .. image:: https://img.shields.io/pypi/pyversions/ssh-config-json.svg
    :target: https://pypi.org/project/ssh-config-json/
    :alt: Python Version
-   
+
 .. image:: https://img.shields.io/pypi/format/ssh-config-json.svg
    :target: https://pypi.org/project/ssh-config-json/
    :alt: pip Format
@@ -41,11 +41,21 @@ SSH Config JSON
 .. image:: https://readthedocs.org/projects/ssh-config-json/badge/?version=latest
    :target: https://ssh-config-json.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
- 
- 
+
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+   :target: https://github.com/psf/black
+   :alt: Black Format
+
 
 ``SSH Config JSON`` enables you to pack and restore your SSH Config and Private Key in JSON format,
-allowing you to backup, port to CI and share with others in the project.
+allowing you to backup, put to CI and share with others in the project.
+
+Features
+========
+
+* Dumping your SSH Config to JSON and restore it
+* Packing up IdentityFiles with the JSON
+* AES encrypting with the JSON to enable pushing and saving public GitHub Repository
 
 Getting Started
 ===============
@@ -75,8 +85,8 @@ Show help.
 
    Usage:
      scj [-h|--help] [-v|--version]
-     scj dump <file> [-c|--config=<config>] [-i|--identityFile]
-     scj restore <file> [-c|--config=<config>] [-i|--identityFile]
+     scj dump <file> [-c|--config=<config>] [-i|--identityFile]　[-e|--encrypt] [--key=<key>]
+     scj restore <file> [-c|--config=<config>] [-i|--identityFile]　[-d|--decrypt=<key>]
 
    Options:
      dump                       : dump SSH Config file to JSON
@@ -86,6 +96,9 @@ Show help.
      -v, --version              : Show version
      -c, --config=<config>      : Specific SSH Config file path [default: ~/.ssh/config]
      -i, --identityFile         : Include IdentityFiles
+     -e, --encrypt              : Encrypt JSON dump with AES
+     --key=<key>                : Set specify key string
+     -d, --decrypt=<key>        : Decrypt JSON dump with AES
 
 Ex1) Dump your SSH Config to JSON
 
@@ -110,6 +123,19 @@ Ex4) Restore JSON to SSH Config with IdentityFiles
 .. code-block:: bash
 
    $ scj restore dump_config.json -i
+
+Ex5) Dump your SSH Config to JSON with AES Encrypt
+
+.. code-block:: bash
+
+   $ scj dump dump_config.json -i -e
+   Encrypt key: 1mado1wmf9amsie0jvo0kfmai9cjasfv # <= This is the "Key"!!
+
+Ex6) Decrypt it
+
+.. code-block:: bash
+
+   $ scj restore dump_config.json -i -d 1mado1wmf9amsie0jvo0kfmai9cjasfv
 
 Testing
 =======
@@ -148,12 +174,21 @@ With tox, you can test multiple python version.(only python 3.6, 3.7, 3.8)
 
    $ tox
 
-Document
-========
+Documents
+=========
 
-The `Document <https://ssh-config-json.readthedocs.io/en/latest/>`_ write by mkdocs.
+The Document is `HERE <https://ssh-config-json.readthedocs.io/en/latest/>`_ written by mkdocs.
+
+The PyPI page is `HERE <https://pypi.org/project/ssh-config-json/>`_ .
+
+The GitHub page is `HERE <https://github.com/tubone24/ssh_config_json>`_ .
 
 Licence
 =======
 
 This software is released under the MIT License, see LICENSE.
+
+Change log
+==========
+
+Read the `GitHub Release Page <https://github.com/tubone24/ssh_config_json/releases>`_ !
