@@ -41,7 +41,7 @@ class AESCipher(object):
         iv = encrypted[: AES.block_size]
         cipher = AES.new(self.key, AES.MODE_EAX, iv)
         data = Padding.unpad(
-            cipher.decrypt(encrypted[AES.block_size:]), AES.block_size, "pkcs7"
+            cipher.decrypt(encrypted[AES.block_size :]), AES.block_size, "pkcs7"
         )
         return data.decode("utf-8")
 
