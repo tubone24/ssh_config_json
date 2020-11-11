@@ -25,15 +25,15 @@ SSH Config JSON
 .. image:: https://img.shields.io/pypi/dm/ssh-config-json.svg
    :target: https://pypi.org/project/ssh-config-json/
    :alt: PyPI downloads
-   
+
 .. image:: https://img.shields.io/pypi/v/ssh-config-json.svg
    :target: https://pypi.org/project/ssh-config-json/
    :alt: pip Version
-   
+
 .. image:: https://img.shields.io/pypi/pyversions/ssh-config-json.svg
    :target: https://pypi.org/project/ssh-config-json/
    :alt: Python Version
-   
+
 .. image:: https://img.shields.io/pypi/format/ssh-config-json.svg
    :target: https://pypi.org/project/ssh-config-json/
    :alt: pip Format
@@ -41,8 +41,11 @@ SSH Config JSON
 .. image:: https://readthedocs.org/projects/ssh-config-json/badge/?version=latest
    :target: https://ssh-config-json.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
- 
- 
+
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+   :target: https://github.com/psf/black
+   :alt: Black Format
+
 
 ``SSH Config JSON`` enables you to pack and restore your SSH Config and Private Key in JSON format,
 allowing you to backup, put to CI and share with others in the project.
