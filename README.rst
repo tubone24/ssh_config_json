@@ -179,10 +179,6 @@ Documents
 
 The Document is `HERE <https://ssh-config-json.readthedocs.io/en/latest/>`_ written by mkdocs.
 
-The PyPI page is `HERE <https://pypi.org/project/ssh-config-json/>`_ .
-
-The GitHub page is `HERE <https://github.com/tubone24/ssh_config_json>`_ .
-
 Licence
 =======
 
