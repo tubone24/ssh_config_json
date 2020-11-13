@@ -51,13 +51,13 @@ def main():
                 encrypt(args["<file>"])
 
     elif args["restore"]:
+        if args["--decrypt"]:
+            decrypt(args["<file>"], args["--decrypt"][0])
         restore(
-            args["<file>"],
+            args["<file>"].replace(".enc"),
             config=args["--config"][0],
             identity_file=args["--identityFile"],
         )
-        if args["--decrypt"]:
-            decrypt(args["<file>"], args["--decrypt"][0])
     else:
         print(__doc__)
 
